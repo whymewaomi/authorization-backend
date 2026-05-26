@@ -2,6 +2,7 @@ package main
 
 import (
 	core_config "auth/internal/core/config"
+	core_middleware "auth/internal/core/middleware"
 	core_postgresql "auth/internal/core/repository/postgresql"
 	core_redis "auth/internal/core/repository/redis"
 	core_server "auth/internal/core/server"
@@ -35,6 +36,7 @@ func main() {
 	
 
 	r.Use(gin.Recovery())
+	r.Use(core_middleware.CORS())
 	r.Use(gin.Logger())
 
   pool, err := core_postgresql.NewPool(ctx, fmt.Sprintf(
