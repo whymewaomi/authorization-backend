@@ -1,0 +1,15 @@
+-- Active: 1778930393098@@127.0.0.1@5432@auth
+
+CREATE SCHEMA IF NOT EXISTS auth;
+
+CREATE TABLE IF NOT EXISTS auth.user_auth (
+	id SERIAL PRIMARY KEY,
+
+	username VARCHAR(32) NOT NULL,
+	email VARCHAR(100) NOT NULL,
+	password_hash VARCHAR(255) NOT NULL,
+	register_at TIMESTAMP DEFAULT NOW(),
+
+	UNIQUE(username),
+	UNIQUE(email)
+)
