@@ -57,6 +57,7 @@ func (h *HTTPAuth) RegisterRouter() {
 	auth := api.Group("/auth")
 	auth.POST("/register", h.RegisterUserAPI)
 	auth.POST("/login", h.LoginUserAPI)
+	auth.POST("/logout", h.LogoutUserAPI)
 
 	token := api.Group("/token")
 	token.POST("/refresh", h.RefreshTokenAPI)
