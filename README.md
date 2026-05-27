@@ -11,6 +11,7 @@ security and scalability in mind.
 - **[Redis](https://redis.io/)** - JWT caching
 - **[JWT](https://jwt.io/)** - token-based authentication
 - **[bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt)** - password hashing
+- **[Swagger](https://github.com/swaggo/swag)** - API documentation
 - **[Docker](https://www.docker.com/)** - multi-stage build
 
 ## Endpoints
