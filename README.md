@@ -21,7 +21,7 @@ security and scalability in mind.
 | `POST` | `/api/v1/auth/login`    | Login and get tokens     | ❌            |
 | `POST` | `/api/v1/token/refresh` | Refresh access token     | ❌            |
 | `POST` | `/api/v1/auth/logout`   | Logout and revoke tokens | ✅            |
-| `GET`  | `/api/v1/auth/profile`  | Get user profile         | ✅            |
+| `GET`  | `/api/v1/profile`       | Get user profile         | ✅            |
 
 ## Running locally
 
