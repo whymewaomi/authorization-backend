@@ -1,14 +1,23 @@
 package auth_transport_http
 
 import (
-	auth_dto "auth/internal/features/Auth/transport/http/dto"
 	"context"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	auth_dto "github.com/whymewaomi/authorization-backend/internal/features/Auth/transport/http/dto"
 )
 
+// LogoutUserAPI godoc
+// @Summary Logout user
+// @Description Logout user and invalidate refresh token
+// @Tags auth
+// @Produce json
+// @Success 200 {object} auth_dto.LogoutDtoReposnse
+// @Failure 404 {object} auth_dto.ErrorResponse
+// @Failure 500 {object} auth_dto.ErrorResponse
+// @Router /api/v1/auth/logout [post]
 func (h *HTTPAuth) LogoutUserAPI(c *gin.Context) {
 	cookie, err := c.Request.Cookie("refresh_token")
 	if err != nil {

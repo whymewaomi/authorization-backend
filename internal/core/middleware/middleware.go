@@ -1,12 +1,12 @@
 package core_middleware
 
 import (
-	core_jwt "auth/internal/core/jwt"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	core_jwt "github.com/whymewaomi/authorization-backend/internal/core/jwt"
 )
 
 
@@ -65,7 +65,7 @@ func JWTCheck() gin.HandlerFunc {
 		claims := token.Claims.(*core_jwt.Claims)
 
 
-		c.Set("user_id", claims.UserID)
+		c.Set(userID, claims.UserID)
 
 		c.Next()
 	}

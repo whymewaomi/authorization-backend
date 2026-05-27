@@ -1,14 +1,24 @@
 package auth_transport_http
 
 import (
-	auth_dto "auth/internal/features/Auth/transport/http/dto"
 	"context"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	auth_dto "github.com/whymewaomi/authorization-backend/internal/features/Auth/transport/http/dto"
 )
 
+// ProfileUserAPI godoc
+// @Summary Get user profile
+// @Description Returns authorized user profile
+// @Tags auth
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} auth_dto.ProfileUserResponse
+// @Failure 401 {object} auth_dto.ErrorResponse
+// @Failure 500 {object} auth_dto.ErrorResponse
+// @Router /api/v1/profile [get]
 func (h *HTTPAuth) ProfileUserAPI(c *gin.Context) {
 	val, exists := c.Get("user_id")
 	if !exists {

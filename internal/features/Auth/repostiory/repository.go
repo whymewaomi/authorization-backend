@@ -1,6 +1,8 @@
 package auth_repository
 
-import core_postgresql "auth/internal/core/repository/postgresql"
+import core_postgresql "github.com/whymewaomi/authorization-backend/internal/core/repository/postgresql"
+
+
 
 type AuthRepository struct {
 	pool core_postgresql.Pool

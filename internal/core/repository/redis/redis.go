@@ -1,11 +1,11 @@
 package core_redis
 
 import (
-	core_config "auth/internal/core/config"
 	"context"
 	"time"
 
 	"github.com/redis/go-redis/v9"
+	core_config "github.com/whymewaomi/authorization-backend/internal/core/config"
 )
 
 type RedisStorage struct {

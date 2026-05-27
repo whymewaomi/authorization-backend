@@ -1,7 +1,6 @@
 package core_server
 
 import (
-	core_config "auth/internal/core/config"
 	"context"
 	"errors"
 	"fmt"
@@ -10,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	core_config "github.com/whymewaomi/authorization-backend/internal/core/config"
 )
 
 type App struct {

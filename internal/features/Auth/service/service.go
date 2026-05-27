@@ -1,9 +1,10 @@
 package auth_service
 
 import (
-	"auth/internal/core/domain"
 	"context"
 	"time"
+
+	"github.com/whymewaomi/authorization-backend/internal/core/domain"
 )
 
 type AuthService struct {

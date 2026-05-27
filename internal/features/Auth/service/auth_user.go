@@ -1,12 +1,14 @@
 package auth_service
 
 import (
-	"auth/internal/core/domain"
-	core_jwt "auth/internal/core/jwt"
 	"context"
 	"database/sql"
 	"errors"
 	"fmt"
+
+	core_jwt "github.com/whymewaomi/authorization-backend/internal/core/jwt"
+
+	"github.com/whymewaomi/authorization-backend/internal/core/domain"
 
 	"golang.org/x/crypto/bcrypt"
 )

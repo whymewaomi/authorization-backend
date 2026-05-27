@@ -1,13 +1,13 @@
 package auth_service
 
 import (
-	core_jwt "auth/internal/core/jwt"
 	"context"
 	"errors"
 	"fmt"
 	"strconv"
 
 	"github.com/redis/go-redis/v9"
+	core_jwt "github.com/whymewaomi/authorization-backend/internal/core/jwt"
 )
 
 

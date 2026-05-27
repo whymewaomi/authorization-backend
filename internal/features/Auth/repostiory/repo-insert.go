@@ -1,8 +1,9 @@
 package auth_repository
 
 import (
-	"auth/internal/core/domain"
 	"context"
+
+	"github.com/whymewaomi/authorization-backend/internal/core/domain"
 )
 
 

@@ -1,23 +1,33 @@
 package main
 
 import (
-	core_config "auth/internal/core/config"
-	core_middleware "auth/internal/core/middleware"
-	core_postgresql "auth/internal/core/repository/postgresql"
-	core_redis "auth/internal/core/repository/redis"
-	core_server "auth/internal/core/server"
-	auth_repository "auth/internal/features/Auth/repostiory"
-	auth_service "auth/internal/features/Auth/service"
-	auth_transport_http "auth/internal/features/Auth/transport/http"
 	"context"
 	"fmt"
 	"log"
 	"os/signal"
 	"syscall"
 
+	_ "github.com/whymewaomi/authorization-backend/docs"
+	core_config "github.com/whymewaomi/authorization-backend/internal/core/config"
+	core_middleware "github.com/whymewaomi/authorization-backend/internal/core/middleware"
+	core_postgresql "github.com/whymewaomi/authorization-backend/internal/core/repository/postgresql"
+	core_redis "github.com/whymewaomi/authorization-backend/internal/core/repository/redis"
+	core_server "github.com/whymewaomi/authorization-backend/internal/core/server"
+	auth_repository "github.com/whymewaomi/authorization-backend/internal/features/Auth/repostiory"
+	auth_service "github.com/whymewaomi/authorization-backend/internal/features/Auth/service"
+	auth_transport_http "github.com/whymewaomi/authorization-backend/internal/features/Auth/transport/http"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"github.com/gin-gonic/gin"
 )
 
+// @title Authorization API
+// @version 1.0
+// @description Authentication backend with JWT
+// @host localhost:5050
+// @BasePath /
 func main() {
 	ctx, cancel := signal.NotifyContext(
 		context.Background(),
@@ -33,6 +43,7 @@ func main() {
 
 	app := core_server.NewApp(cfg)
 	r := app.GetEngine()
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	
 
 	r.Use(gin.Recovery())
@@ -40,9 +51,10 @@ func main() {
 	r.Use(gin.Logger())
 
   pool, err := core_postgresql.NewPool(ctx, fmt.Sprintf(
-		"postgres://%s:%s@postgres:5432/auth?sslmode=disable", 
+		"postgres://%s:%s@postgres:5432/%s?sslmode=disable", 
 		cfg.PostgresUser,
 		cfg.PostgresPassword,
+		cfg.PostgresDB,
 	))
 	if err != nil {
 		panic(err)

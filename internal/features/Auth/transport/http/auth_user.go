@@ -1,18 +1,28 @@
 package auth_transport_http
 
 import (
-	"auth/internal/core/domain"
-	auth_dto "auth/internal/features/Auth/transport/http/dto"
 	"context"
 	"net/http"
 	"time"
+
+	"github.com/whymewaomi/authorization-backend/internal/core/domain"
+	auth_dto "github.com/whymewaomi/authorization-backend/internal/features/Auth/transport/http/dto"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
-
-
+// RegisterUserAPI godoc
+// @Summary Register new user
+// @Description Create a new account and return JWT tokens
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param input body auth_dto.RegisterUserDTO true "Register data"
+// @Success 200 {object} auth_dto.RegisterUserResponse
+// @Failure 400 {object} auth_dto.ErrorResponse
+// @Failure 500 {object} auth_dto.ErrorResponse
+// @Router /api/v1/auth/register [post]
 func (h *HTTPAuth) RegisterUserAPI(c *gin.Context) {
 	var authUser auth_dto.RegisterUserDTO
 	if err := c.ShouldBindJSON(&authUser); err != nil {

@@ -1,16 +1,26 @@
 package auth_transport_http
 
 import (
-	"auth/internal/core/domain"
-	auth_dto "auth/internal/features/Auth/transport/http/dto"
 	"context"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/whymewaomi/authorization-backend/internal/core/domain"
+	auth_dto "github.com/whymewaomi/authorization-backend/internal/features/Auth/transport/http/dto"
 )
 
+// LoginUserAPI godoc
+// @Summary Login user
+// @Description Login with username and password
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param input body auth_dto.LoginUserDto true "Login data"
+// @Success 200 {object} auth_dto.LoginUserResponse
+// @Failure 400 {object} auth_dto.ErrorResponse
+// @Router /api/v1/auth/login [post]
 func (h *HTTPAuth) LoginUserAPI(c *gin.Context) {
 	var user auth_dto.LoginUserDto
 	if err := c.ShouldBindJSON(&user); err != nil {

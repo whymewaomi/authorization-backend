@@ -1,14 +1,23 @@
 package auth_transport_http
 
 import (
-	auth_dto "auth/internal/features/Auth/transport/http/dto"
 	"context"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	auth_dto "github.com/whymewaomi/authorization-backend/internal/features/Auth/transport/http/dto"
 )
 
+// RefreshTokenAPI godoc
+// @Summary Refresh access token
+// @Description Generate new access token using refresh token
+// @Tags auth
+// @Produce json
+// @Success 200 {object} auth_dto.NewAccessToken
+// @Failure 401 {object} auth_dto.ErrorResponse
+// @Failure 404 {object} auth_dto.ErrorResponse
+// @Router /api/v1/token/refresh [post]
 func (h *HTTPAuth) RefreshTokenAPI(c *gin.Context) {
 	cookie, err := c.Request.Cookie("refresh_token")
 	if err != nil {

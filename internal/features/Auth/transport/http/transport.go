@@ -1,9 +1,10 @@
 package auth_transport_http
 
 import (
-	"auth/internal/core/domain"
-	core_middleware "auth/internal/core/middleware"
 	"context"
+
+	"github.com/whymewaomi/authorization-backend/internal/core/domain"
+	core_middleware "github.com/whymewaomi/authorization-backend/internal/core/middleware"
 
 	"github.com/gin-gonic/gin"
 )

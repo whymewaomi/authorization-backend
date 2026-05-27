@@ -1,7 +1,6 @@
 package auth_service
 
 import (
-	"auth/internal/core/domain"
 	"context"
 	"encoding/json"
 	"errors"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/redis/go-redis/v9"
+	"github.com/whymewaomi/authorization-backend/internal/core/domain"
 )
 
 func (s *AuthService) ProfileUser(
