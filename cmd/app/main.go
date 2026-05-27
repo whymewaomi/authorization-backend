@@ -43,12 +43,12 @@ func main() {
 
 	app := core_server.NewApp(cfg)
 	r := app.GetEngine()
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	
 
 	r.Use(gin.Recovery())
 	r.Use(core_middleware.CORS())
 	r.Use(gin.Logger())
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
   pool, err := core_postgresql.NewPool(ctx, fmt.Sprintf(
 		"postgres://%s:%s@postgres:5432/%s?sslmode=disable", 
