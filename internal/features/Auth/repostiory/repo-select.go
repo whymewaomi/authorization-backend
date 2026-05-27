@@ -25,7 +25,7 @@ func (p *AuthRepository) GetUserByUsername(
 		&user.Password,
 		&user.RegisterAt,
 	); err != nil {
-		return &domain.User{}, err
+		return nil, err
 	}
 
   return &user, nil
@@ -49,7 +49,7 @@ func (p *AuthRepository) GetUserByID(
 		&user.Email,
 		&user.RegisterAt,
 	); err != nil {
-		return &domain.User{}, err
+		return nil, err
 	}
 
   return &user, nil

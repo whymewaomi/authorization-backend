@@ -35,10 +35,10 @@ func (s *AuthService) RegisterUser(
 
   existingUser, err := s.authRepository.GetUserByUsername(ctx, user.Username)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-        return nil, fmt.Errorf("check username: %w", err)
+        return &domain.UserToken{}, fmt.Errorf("check username: %w", err)
     }
     if existingUser != nil {
-        return nil, fmt.Errorf("username '%s' already exists", user.Username)
+        return &domain.UserToken{}, fmt.Errorf("username '%s' already exists", user.Username)
   }
 
 	passwordHash, err := s.HashPassword(user.Password)
