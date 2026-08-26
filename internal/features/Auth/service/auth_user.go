@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	core_errors "github.com/whymewaomi/authorization-backend/internal/core/errors"
 	core_jwt "github.com/whymewaomi/authorization-backend/internal/core/jwt"
 
 	"github.com/whymewaomi/authorization-backend/internal/core/domain"
@@ -34,15 +35,15 @@ func (s *AuthService) RegisterUser(
 
 	existingUser, err := s.authRepository.GetUserByUsername(ctx, user.Username)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		return &domain.UserToken{}, fmt.Errorf("check username: %w", err)
+		return &domain.UserToken{}, core_errors.ErrValidation
 	}
 	if existingUser != nil {
-		return &domain.UserToken{}, fmt.Errorf("username '%s' already exists", user.Username)
+		return &domain.UserToken{}, core_errors.ErrUsernameExists
 	}
 
 	passwordHash, err := s.HashPassword(user.Password)
 	if err != nil {
-		return &domain.UserToken{}, fmt.Errorf("failed hash: %w", err)
+		return &domain.UserToken{}, core_errors.ErrBadRequest
 	}
 	user.Password = passwordHash
 

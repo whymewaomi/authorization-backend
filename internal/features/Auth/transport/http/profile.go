@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	core_dto "github.com/whymewaomi/authorization-backend/internal/core/dto"
+	core_errors "github.com/whymewaomi/authorization-backend/internal/core/errors"
 )
 
 // ProfileUserAPI godoc
@@ -22,18 +23,18 @@ import (
 func (h *HTTPAuth) ProfileUserAPI(c *gin.Context) {
 	val, exists := c.Get("user_id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, core_dto.ErrorResponse{
-			Status:  http.StatusUnauthorized,
-			Message: "unauthorized",
+		c.JSON(http.StatusBadRequest, core_errors.ErrorsMessage{
+			StatusCode: core_errors.ErrBadRequest.Error(),
+			Details:    "userID not found",
 		})
 		return
 	}
 
 	userID, ok := val.(int)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, core_dto.ErrorResponse{
-			Status:  http.StatusUnauthorized,
-			Message: "invalid user id",
+		c.JSON(http.StatusBadRequest, core_errors.ErrorsMessage{
+			StatusCode: core_errors.ErrBadRequest.Error(),
+			Details:    "invalid userID",
 		})
 		return
 	}
@@ -43,10 +44,8 @@ func (h *HTTPAuth) ProfileUserAPI(c *gin.Context) {
 
 	user, err := h.authService.ProfileUser(ctx, userID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, core_dto.ErrorResponse{
-			Status:  http.StatusInternalServerError,
-			Message: "failed to get profile",
-		})
+		errors := core_errors.ErrorsResponse(err)
+		c.JSON(errors.Status, errors)
 		return
 	}
 

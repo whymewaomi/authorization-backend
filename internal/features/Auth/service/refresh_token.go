@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/redis/go-redis/v9"
+	core_errors "github.com/whymewaomi/authorization-backend/internal/core/errors"
 	core_jwt "github.com/whymewaomi/authorization-backend/internal/core/jwt"
 )
 
@@ -16,11 +17,11 @@ func (s *AuthService) RefreshToken(
 ) (string, error) {
 	userIDStr, err := s.authStorage.Get(ctx, refreshToken)
 	if err != nil && !errors.Is(err, redis.Nil) {
-		return "", fmt.Errorf("token invalid: %w", err)
+		return "", fmt.Errorf("%s %w", core_errors.ErrTokenInvalid, err)
 	}
 
 	if errors.Is(err, redis.Nil) {
-		return "", errors.New("token invalid")
+		return "", core_errors.ErrTokenInvalid
 	}
 
 	userID, err := strconv.Atoi(userIDStr)

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	core_dto "github.com/whymewaomi/authorization-backend/internal/core/dto"
+	core_errors "github.com/whymewaomi/authorization-backend/internal/core/errors"
 )
 
 // RefreshTokenAPI godoc
@@ -21,9 +21,9 @@ import (
 func (h *HTTPAuth) RefreshTokenAPI(c *gin.Context) {
 	cookie, err := c.Request.Cookie("refresh_token")
 	if err != nil {
-		c.JSON(http.StatusNotFound, core_dto.ErrorResponse{
-			Status:  http.StatusNotFound,
-			Message: "invalid refresh token",
+		c.JSON(http.StatusBadRequest, core_errors.ErrorsMessage{
+			StatusCode: core_errors.ErrBadRequest.Error(),
+			Details:    "invalid refresh token",
 		})
 		return
 	}
@@ -33,10 +33,8 @@ func (h *HTTPAuth) RefreshTokenAPI(c *gin.Context) {
 
 	jwt, err := h.authService.RefreshToken(ctx, cookie.Value)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, core_dto.ErrorResponse{
-			Status:  http.StatusUnauthorized,
-			Message: err.Error(),
-		})
+		errors := core_errors.ErrorsResponse(err)
+		c.JSON(errors.Status, errors)
 		return
 	}
 

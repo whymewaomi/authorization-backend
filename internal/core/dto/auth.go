@@ -21,11 +21,6 @@ type LoginUserDto struct {
 	Password string `json:"password" binding:"required,min=6,max=48"`
 }
 
-type ErrorResponse struct {
-	Status  int    `json:"status"`
-	Message string `json:"message"`
-}
-
 type ProfileUserResponse struct {
 	ID         int       `json:"id"`
 	Username   string    `json:"username"`

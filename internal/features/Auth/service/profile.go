@@ -10,6 +10,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/redis/go-redis/v9"
 	"github.com/whymewaomi/authorization-backend/internal/core/domain"
+	core_errors "github.com/whymewaomi/authorization-backend/internal/core/errors"
 )
 
 func (s *AuthService) ProfileUser(
@@ -36,7 +37,7 @@ func (s *AuthService) ProfileUser(
 	user, err := s.authRepository.GetUserByID(ctx, userID)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return &domain.User{}, fmt.Errorf("user not found")
+			return &domain.User{}, core_errors.ErrUserNotFound
 		}
 
 		return &domain.User{}, fmt.Errorf("error: %w", err)

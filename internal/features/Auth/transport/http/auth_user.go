@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/whymewaomi/authorization-backend/internal/core/domain"
 	core_dto "github.com/whymewaomi/authorization-backend/internal/core/dto"
+	core_errors "github.com/whymewaomi/authorization-backend/internal/core/errors"
 )
 
 var (
@@ -29,9 +30,9 @@ var (
 func (h *HTTPAuth) RegisterUserAPI(c *gin.Context) {
 	var authUser core_dto.RegisterUserDTO
 	if err := c.ShouldBindJSON(&authUser); err != nil {
-		c.JSON(http.StatusBadRequest, core_dto.ErrorResponse{
-			Status:  http.StatusBadRequest,
-			Message: err.Error(),
+		c.JSON(http.StatusBadRequest, core_errors.ErrorsMessage{
+			StatusCode: core_errors.ErrBadRequest.Error(),
+			Details:    err.Error(),
 		})
 		return
 	}
@@ -47,10 +48,8 @@ func (h *HTTPAuth) RegisterUserAPI(c *gin.Context) {
 
 	jwt, err := h.authService.RegisterUser(ctx, userDomain)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, core_dto.ErrorResponse{
-			Status:  http.StatusBadRequest,
-			Message: err.Error(),
-		})
+		errors := core_errors.ErrorsResponse(err)
+		c.JSON(errors.Status, errors)
 		return
 	}
 
@@ -59,10 +58,8 @@ func (h *HTTPAuth) RegisterUserAPI(c *gin.Context) {
 	c.SetCookie("refresh_token", refreshToken, 9999999, "/", "", isProd, true)
 
 	if err := h.authService.SaveRefreshToken(ctx, refreshToken, jwt.ID); err != nil {
-		c.JSON(http.StatusInternalServerError, core_dto.ErrorResponse{
-			Status:  http.StatusInternalServerError,
-			Message: err.Error(),
-		})
+		errors := core_errors.ErrorsResponse(err)
+		c.JSON(errors.Status, errors)
 		return
 	}
 

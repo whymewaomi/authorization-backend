@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/whymewaomi/authorization-backend/internal/core/domain"
+	core_errors "github.com/whymewaomi/authorization-backend/internal/core/errors"
 	core_jwt "github.com/whymewaomi/authorization-backend/internal/core/jwt"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -21,11 +22,11 @@ func (s *AuthService) ValidateUser(
 	}
 
 	if userFromDB == nil {
-		return 0, fmt.Errorf("user not found")
+		return 0, core_errors.ErrUserNotFound
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(userFromDB.Password), []byte(user.Password)); err != nil {
-		return 0, errors.New("incorrect nickname or password")
+		return 0, core_errors.ErrInvalidCredentials
 	}
 
 	return userFromDB.ID, nil
@@ -37,7 +38,7 @@ func (s *AuthService) LoginUser(
 ) (*domain.UserToken, error) {
 	userID, err := s.ValidateUser(ctx, user)
 	if err != nil {
-		return &domain.UserToken{}, errors.New("invalid credentials")
+		return &domain.UserToken{}, core_errors.ErrInvalidCredentials
 	}
 
 	jwt, err := core_jwt.GenerateJWT(userID)
