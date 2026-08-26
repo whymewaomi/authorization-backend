@@ -10,7 +10,6 @@ import (
 	core_jwt "github.com/whymewaomi/authorization-backend/internal/core/jwt"
 )
 
-
 func (s *AuthService) RefreshToken(
 	ctx context.Context,
 	refreshToken string,

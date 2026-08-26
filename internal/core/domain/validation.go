@@ -6,26 +6,19 @@ import (
 	"regexp"
 )
 
-var ( 
-	validChars = regexp.MustCompile(`^[a-zA-Z0-9!@#$%^&*()_+=\-]+$`)
+var (
+	validChars    = regexp.MustCompile(`^[a-zA-Z0-9!@#$%^&*()_+=\-]+$`)
 	usernameRegex = regexp.MustCompile(`^[a-zA-Z0-9](?:[a-zA-Z0-9._]{1,18})[a-zA-Z0-9]$`)
-
 )
 
-
 func (user *User) Validate() error {
-	 if user.Username == "" || user.Email == "" || user.Password == "" || user.PasswordConfirm == "" {
+	if user.Username == "" || user.Email == "" || user.Password == "" || user.PasswordConfirm == "" {
 		return errors.New("Invalid request")
 	}
 
-
-	if user.Password != user.PasswordConfirm {
-		return errors.New("Passwords are not recommended")
-	}
-  
 	_, err := mail.ParseAddress(user.Email)
 	if err != nil {
-		return errors.New("The mail is incorrect")		
+		return errors.New("The mail is incorrect")
 	}
 
 	if len([]rune(user.Password)) < 6 {
@@ -35,12 +28,10 @@ func (user *User) Validate() error {
 	if !validChars.MatchString(user.Password) {
 		return errors.New("Invalid password")
 	}
-  
-  
+
 	if !usernameRegex.MatchString(user.Username) {
 		return errors.New("Invalid username")
 	}
 
 	return nil
 }
-

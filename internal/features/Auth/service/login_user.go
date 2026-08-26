@@ -11,7 +11,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-
 func (s *AuthService) ValidateUser(
 	ctx context.Context,
 	user *domain.User,
@@ -28,7 +27,6 @@ func (s *AuthService) ValidateUser(
 	if err := bcrypt.CompareHashAndPassword([]byte(userFromDB.Password), []byte(user.Password)); err != nil {
 		return 0, errors.New("incorrect nickname or password")
 	}
-
 
 	return userFromDB.ID, nil
 }

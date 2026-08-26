@@ -4,6 +4,9 @@ services:
     container_name: auth
     ports:
       - '${HOST}:${HOST}'
+    volumes:
+      - ./storage:/app/storage
+    restart: always
 
   redis:
     image: redis:latest
@@ -30,5 +33,6 @@ services:
     restart: always
 
 volumes:
+  storage:
   pgdata:
   redis_data:

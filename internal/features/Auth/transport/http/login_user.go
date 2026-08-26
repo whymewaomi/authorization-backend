@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/whymewaomi/authorization-backend/internal/core/domain"
-	auth_dto "github.com/whymewaomi/authorization-backend/internal/features/Auth/transport/http/dto"
+	core_dto "github.com/whymewaomi/authorization-backend/internal/core/dto"
 )
 
 // LoginUserAPI godoc
@@ -18,55 +18,50 @@ import (
 // @Accept json
 // @Produce json
 // @Param input body auth_dto.LoginUserDto true "Login data"
-// @Success 200 {object} auth_dto.LoginUserResponse
+// @Success 200 {object} gin.H
 // @Failure 400 {object} auth_dto.ErrorResponse
 // @Router /api/v1/auth/login [post]
 func (h *HTTPAuth) LoginUserAPI(c *gin.Context) {
-	var user auth_dto.LoginUserDto
+	var user core_dto.LoginUserDto
 	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, auth_dto.ErrorResponse{
-			Status: http.StatusBadRequest,
+		c.JSON(http.StatusBadRequest, core_dto.ErrorResponse{
+			Status:  http.StatusBadRequest,
 			Message: err.Error(),
 		})
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 5 * time.Second)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
 	defer cancel()
 
-	userDomain := NewUserPatchLogin(user)
+	userDomain := domain.NewUser(
+		user.Username,
+		nil,
+		user.Password,
+	)
+
 	jwt, err := h.authService.LoginUser(ctx, userDomain)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, auth_dto.ErrorResponse{
-			Status: http.StatusUnauthorized,
+		c.JSON(http.StatusUnauthorized, core_dto.ErrorResponse{
+			Status:  http.StatusUnauthorized,
 			Message: err.Error(),
 		})
-		return 
+		return
 	}
 
 	refreshToken := uuid.NewString()
 
-	c.SetCookie("refresh_token", refreshToken, 9999999, "/", "", false, true)
-
+	c.SetCookie("refresh_token", refreshToken, 9999999, "/", "", isProd, true)
 
 	if err := h.authService.SaveRefreshToken(ctx, refreshToken, jwt.ID); err != nil {
-		c.JSON(http.StatusInternalServerError, auth_dto.ErrorResponse{
-			Status: http.StatusInternalServerError,
+		c.JSON(http.StatusInternalServerError, core_dto.ErrorResponse{
+			Status:  http.StatusInternalServerError,
 			Message: err.Error(),
 		})
 		return
 	}
 
-
-	c.JSON(http.StatusOK, auth_dto.LoginUserResponse{
-		AccessToken: jwt.AccessToken,
-		RefreshToken: refreshToken,
+	c.JSON(http.StatusOK, gin.H{
+		"access_token": jwt.AccessToken,
 	})
-}
-
-func NewUserPatchLogin(req auth_dto.LoginUserDto) *domain.User {
-	return domain.NewLoginUser(
-		req.Username,
-		req.Password,
-	)
 }

@@ -11,35 +11,35 @@ import (
 
 type HTTPAuth struct {
 	authService AuthService
-	engine *gin.Engine
+	engine      *gin.Engine
 }
 
 type AuthService interface {
-  SaveRefreshToken(
-	ctx context.Context,
-	refreshToken string,
-	userID interface{},
-) error
-  RegisterUser(
-	ctx context.Context,
-	user *domain.User,
-) (*domain.UserToken, error)
-  RefreshToken(
-	ctx context.Context,
-	refreshToken string,
-) (string, error)
-  LoginUser(
-	ctx context.Context,
-	user *domain.User,
-) (*domain.UserToken, error)
-  LogoutUser(
-	ctx context.Context,
-	refreshToken string, 
-) error
-  ProfileUser(
-	ctx context.Context,
-	userID int,
-) (*domain.User, error)
+	SaveRefreshToken(
+		ctx context.Context,
+		refreshToken string,
+		userID interface{},
+	) error
+	RegisterUser(
+		ctx context.Context,
+		user *domain.User,
+	) (*domain.UserToken, error)
+	RefreshToken(
+		ctx context.Context,
+		refreshToken string,
+	) (string, error)
+	LoginUser(
+		ctx context.Context,
+		user *domain.User,
+	) (*domain.UserToken, error)
+	LogoutUser(
+		ctx context.Context,
+		refreshToken string,
+	) error
+	ProfileUser(
+		ctx context.Context,
+		userID int,
+	) (*domain.User, error)
 }
 
 func NewAuth(
@@ -48,7 +48,7 @@ func NewAuth(
 ) *HTTPAuth {
 	return &HTTPAuth{
 		authService: authService,
-		engine: engine,
+		engine:      engine,
 	}
 }
 

@@ -3,16 +3,16 @@ package domain
 import "time"
 
 type User struct {
-	ID int
-	Username string 
-	Email string
-	Password string
+	ID              int
+	Username        string
+	Email           string
+	Password        string
 	PasswordConfirm string
-	RegisterAt time.Time
+	RegisterAt      time.Time
 }
 
 type UserToken struct {
-	ID int
+	ID          int
 	AccessToken string
 }
 
@@ -33,9 +33,9 @@ func NewRegisterUser(
 	PasswordConfirm string,
 ) *User {
 	return &User{
-		Username: Username,
-		Email: Email,
-		Password: Password,
+		Username:        Username,
+		Email:           Email,
+		Password:        Password,
 		PasswordConfirm: PasswordConfirm,
 	}
 }
@@ -45,7 +45,26 @@ func NewUserToken(
 	AccessToken string,
 ) *UserToken {
 	return &UserToken{
-		ID: ID,
+		ID:          ID,
 		AccessToken: AccessToken,
+	}
+}
+
+func NewUser(
+	username string,
+	email *string,
+	password string,
+) *User {
+	if email == nil {
+		return &User{
+			Username: username,
+			Password: password,
+		}
+	}
+
+	return &User{
+		Username: username,
+		Email:    *email,
+		Password: password,
 	}
 }

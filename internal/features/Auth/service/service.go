@@ -9,39 +9,39 @@ import (
 
 type AuthService struct {
 	authRepository AuthRepository
-	authStorage AuthStorage
+	authStorage    AuthStorage
 }
 
 type AuthRepository interface {
-  GetUserByUsername(
-	ctx context.Context,
-	username string,
-) (*domain.User, error)
-  CreateUser(
-	ctx context.Context,
-	user *domain.User,
-) (int, error)
-  GetUserByID(
-	ctx context.Context,
-	userID int,
-) (*domain.User, error)
+	GetUserByUsername(
+		ctx context.Context,
+		username string,
+	) (*domain.User, error)
+	CreateUser(
+		ctx context.Context,
+		user *domain.User,
+	) (int, error)
+	GetUserByID(
+		ctx context.Context,
+		userID int,
+	) (*domain.User, error)
 }
 
 type AuthStorage interface {
 	Set(
-	ctx context.Context,
-	key string,
-	val interface{},
-	ttl time.Duration,
-) error
-  Get(
-	ctx context.Context,
-	key string,
-) (string, error)
-  Del(
-	ctx context.Context,
-	key string,
-) error
+		ctx context.Context,
+		key string,
+		val interface{},
+		ttl time.Duration,
+	) error
+	Get(
+		ctx context.Context,
+		key string,
+	) (string, error)
+	Del(
+		ctx context.Context,
+		key string,
+	) error
 }
 
 func NewAuthService(
@@ -50,6 +50,6 @@ func NewAuthService(
 ) *AuthService {
 	return &AuthService{
 		authRepository: authRepository,
-		authStorage: authStorage,
+		authStorage:    authStorage,
 	}
 }

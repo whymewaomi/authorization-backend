@@ -4,7 +4,7 @@ import "context"
 
 func (s *AuthService) LogoutUser(
 	ctx context.Context,
-	refreshToken string, 
+	refreshToken string,
 ) error {
-  return s.authStorage.Del(ctx, refreshToken)
+	return s.authStorage.Del(ctx, refreshToken)
 }

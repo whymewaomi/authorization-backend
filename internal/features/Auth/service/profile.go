@@ -27,7 +27,7 @@ func (s *AuthService) ProfileUser(
 		}
 
 		return &user, nil
-	} 
+	}
 
 	if !errors.Is(err, redis.Nil) {
 		return nil, fmt.Errorf("redis get: %w", err)
@@ -36,18 +36,18 @@ func (s *AuthService) ProfileUser(
 	user, err := s.authRepository.GetUserByID(ctx, userID)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-		return &domain.User{}, fmt.Errorf("user not found")
-	}
+			return &domain.User{}, fmt.Errorf("user not found")
+		}
 
 		return &domain.User{}, fmt.Errorf("error: %w", err)
 	}
-  
+
 	userMarshal, err := json.Marshal(user)
 	if err != nil {
 		return &domain.User{}, fmt.Errorf("error marshal: %w", err)
 	}
 
-	if err := s.authStorage.Set(ctx, userIDCache, userMarshal, 5 * time.Second); err != nil {
+	if err := s.authStorage.Set(ctx, userIDCache, userMarshal, 5*time.Second); err != nil {
 		return &domain.User{}, fmt.Errorf("failed set cache: %w", err)
 	}
 

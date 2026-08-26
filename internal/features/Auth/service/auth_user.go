@@ -24,7 +24,6 @@ func (s *AuthService) HashPassword(
 	return string(passwordHash), nil
 }
 
-
 func (s *AuthService) RegisterUser(
 	ctx context.Context,
 	user *domain.User,
@@ -33,19 +32,19 @@ func (s *AuthService) RegisterUser(
 		return &domain.UserToken{}, fmt.Errorf("validation error: %w", err)
 	}
 
-  existingUser, err := s.authRepository.GetUserByUsername(ctx, user.Username)
+	existingUser, err := s.authRepository.GetUserByUsername(ctx, user.Username)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-        return &domain.UserToken{}, fmt.Errorf("check username: %w", err)
-    }
-    if existingUser != nil {
-        return &domain.UserToken{}, fmt.Errorf("username '%s' already exists", user.Username)
-  }
+		return &domain.UserToken{}, fmt.Errorf("check username: %w", err)
+	}
+	if existingUser != nil {
+		return &domain.UserToken{}, fmt.Errorf("username '%s' already exists", user.Username)
+	}
 
 	passwordHash, err := s.HashPassword(user.Password)
 	if err != nil {
 		return &domain.UserToken{}, fmt.Errorf("failed hash: %w", err)
 	}
-  user.Password = passwordHash
+	user.Password = passwordHash
 
 	userID, err := s.authRepository.CreateUser(ctx, user)
 	if err != nil {
@@ -59,4 +58,3 @@ func (s *AuthService) RegisterUser(
 
 	return domain.NewUserToken(userID, jwt), nil
 }
-

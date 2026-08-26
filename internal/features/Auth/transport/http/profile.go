@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	auth_dto "github.com/whymewaomi/authorization-backend/internal/features/Auth/transport/http/dto"
+	core_dto "github.com/whymewaomi/authorization-backend/internal/core/dto"
 )
 
 // ProfileUserAPI godoc
@@ -22,8 +22,8 @@ import (
 func (h *HTTPAuth) ProfileUserAPI(c *gin.Context) {
 	val, exists := c.Get("user_id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, auth_dto.ErrorResponse{
-			Status: http.StatusUnauthorized,
+		c.JSON(http.StatusUnauthorized, core_dto.ErrorResponse{
+			Status:  http.StatusUnauthorized,
 			Message: "unauthorized",
 		})
 		return
@@ -31,29 +31,29 @@ func (h *HTTPAuth) ProfileUserAPI(c *gin.Context) {
 
 	userID, ok := val.(int)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, auth_dto.ErrorResponse{
-			Status: http.StatusUnauthorized,
+		c.JSON(http.StatusUnauthorized, core_dto.ErrorResponse{
+			Status:  http.StatusUnauthorized,
 			Message: "invalid user id",
 		})
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 5 * time.Second)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
 	defer cancel()
 
 	user, err := h.authService.ProfileUser(ctx, userID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, auth_dto.ErrorResponse{
-			Status: http.StatusInternalServerError,
+		c.JSON(http.StatusInternalServerError, core_dto.ErrorResponse{
+			Status:  http.StatusInternalServerError,
 			Message: "failed to get profile",
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, auth_dto.ProfileUserResponse{
-		ID: user.ID,
-		Username: user.Username,
-		Email: user.Email,
+	c.JSON(http.StatusOK, core_dto.ProfileUserResponse{
+		ID:         user.ID,
+		Username:   user.Username,
+		Email:      user.Email,
 		RegisterAt: user.RegisterAt,
 	})
 }

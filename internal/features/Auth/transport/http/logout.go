@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	auth_dto "github.com/whymewaomi/authorization-backend/internal/features/Auth/transport/http/dto"
+	core_dto "github.com/whymewaomi/authorization-backend/internal/core/dto"
 )
 
 // LogoutUserAPI godoc
@@ -21,27 +21,33 @@ import (
 func (h *HTTPAuth) LogoutUserAPI(c *gin.Context) {
 	cookie, err := c.Request.Cookie("refresh_token")
 	if err != nil {
-		c.JSON(http.StatusNotFound, auth_dto.ErrorResponse{
-			Status: http.StatusNotFound,
+		c.JSON(http.StatusNotFound, core_dto.ErrorResponse{
+			Status:  http.StatusNotFound,
 			Message: "invalid refresh token",
 		})
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 5 * time.Second)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
 	defer cancel()
 
 	if err := h.authService.LogoutUser(ctx, cookie.Value); err != nil {
-		c.JSON(http.StatusInternalServerError, auth_dto.ErrorResponse{
-			Status: http.StatusInternalServerError,
+		c.JSON(http.StatusInternalServerError, core_dto.ErrorResponse{
+			Status:  http.StatusInternalServerError,
 			Message: err.Error(),
 		})
 		return
 	}
 
-	c.SetCookie("refresh_token", "", -1, "/", "", false, true)
+	c.SetCookie(
+		"refresh_token",
+		"",
+		-1,
+		"/",
+		"",
+		isProd,
+		true,
+	)
 
-  c.JSON(http.StatusOK, auth_dto.LogoutDtoReposnse{
-		Status: "you have successfully logged out",
-	})
+	c.Status(200)
 }

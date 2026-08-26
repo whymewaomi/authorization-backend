@@ -12,7 +12,7 @@ func (p *AuthRepository) GetUserByUsername(
 ) (*domain.User, error) {
 	sql := `
 	SELECT id, username, email, password_hash, register_at
-	FROM auth.user_auth 
+	FROM auth.user_auth
 	WHERE username = $1
 	`
 
@@ -28,7 +28,7 @@ func (p *AuthRepository) GetUserByUsername(
 		return nil, err
 	}
 
-  return &user, nil
+	return &user, nil
 }
 
 func (p *AuthRepository) GetUserByID(
@@ -37,7 +37,7 @@ func (p *AuthRepository) GetUserByID(
 ) (*domain.User, error) {
 	sql := `
 	SELECT id, username, email, register_at
-	FROM auth.user_auth 
+	FROM auth.user_auth
 	WHERE id = $1
 	`
 
@@ -52,5 +52,5 @@ func (p *AuthRepository) GetUserByID(
 		return nil, err
 	}
 
-  return &user, nil
+	return &user, nil
 }
